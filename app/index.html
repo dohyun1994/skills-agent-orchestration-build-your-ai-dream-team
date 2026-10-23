@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f4">
+  <meta name="description" content="A clear, contributor-friendly view of Mona's project portfolio.">
+  <title>Project Pulse</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#main" aria-label="Project Pulse home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M5 17h6l3-8 5 15 3-7h5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>mona<span class="brand-dot">.</span></span>
+      </a>
+      <div class="workspace-label"><span class="workspace-dot" aria-hidden="true"></span> Team workspace</div>
+      <div class="topbar-right">
+        <span class="topbar-note">A little more in sync</span>
+        <span class="avatar" aria-label="Mona">M</span>
+      </div>
+    </header>
+
+    <main id="main" class="dashboard">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> YOUR TEAM, AT A GLANCE</p>
+          <h1 id="page-title">Project <span>Pulse</span></h1>
+          <p class="hero-description">The latest from your team’s projects, all in one place.</p>
+        </div>
+        <div class="hero-aside">
+          <div class="sync-indicator"><span aria-hidden="true"></span> Live team overview</div>
+          <p>Good work happens when<br>everyone knows what’s moving.</p>
+        </div>
+      </section>
+
+      <section class="overview" aria-label="Project overview">
+        <div class="overview-heading">
+          <div>
+            <p class="section-kicker">THE BIG PICTURE</p>
+            <h2>Team overview</h2>
+          </div>
+          <p id="updated-label" class="updated-label">Your team's current snapshot</p>
+        </div>
+        <div class="overview-grid">
+          <article class="overview-card overview-total">
+            <div class="overview-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="13" y="4" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="13" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="13" y="13" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/></svg>
+            </div>
+            <div><p class="metric-label">Projects</p><p class="metric-value" id="project-count">—</p></div>
+            <span class="metric-caption">on the board</span>
+          </article>
+          <article class="overview-card overview-active">
+            <div class="overview-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 13h4l2.2-6L14 18l2.2-5H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div><p class="metric-label">In motion</p><p class="metric-value" id="active-count">—</p></div>
+            <span class="metric-caption">active projects</span>
+          </article>
+          <article class="overview-card overview-focus">
+            <div class="overview-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="m12 3 2.2 5.5L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.5L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m19 15 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z" fill="currentColor"/></svg>
+            </div>
+            <div><p class="metric-label">Needs a look</p><p class="metric-value" id="focus-count">—</p></div>
+            <span class="metric-caption">high priority</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="projects-section" aria-labelledby="projects-heading">
+        <div class="projects-heading">
+          <div>
+            <p class="section-kicker">MADE BY YOUR TEAM</p>
+            <h2 id="projects-heading">Projects <span id="projects-heading-count"></span></h2>
+          </div>
+          <p class="projects-hint"><span class="hint-sparkle" aria-hidden="true">✳</span> Small steps add up to big things.</p>
+        </div>
+        <div id="projects" class="project-grid" aria-live="polite" aria-busy="true">
+          <p class="loading-message">Gathering the latest from your team…</p>
+        </div>
+        <p id="error-message" class="error-message" role="alert" hidden></p>
+      </section>
+
+      <footer class="footer">
+        <span class="footer-mark" aria-hidden="true">✳</span>
+        <span>Made for the people who make it happen.</span>
+        <span class="footer-year">Mona’s team · Project Pulse</span>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const projectsContainer = document.querySelector("#projects");
+    const errorMessage = document.querySelector("#error-message");
+
+    function makeTextElement(tagName, className, text) {
+      const element = document.createElement(tagName);
+      element.className = className;
+      element.textContent = text;
+      return element;
+    }
+
+    function renderProject(project) {
+      const card = document.createElement("article");
+      card.className = "project-card";
+
+      const cardTop = document.createElement("div");
+      cardTop.className = "card-top";
+      const status = makeTextElement("span", "status-badge", project.status);
+      const statusClass = project.status.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      status.classList.add(`status-${statusClass}`);
+      cardTop.append(status, makeTextElement("span", "card-sparkle", "✳"));
+
+      const heading = makeTextElement("h3", "project-name", project.name);
+      const owner = document.createElement("p");
+      owner.className = "project-owner";
+      const ownerIcon = makeTextElement("span", "owner-icon", project.owner.trim().charAt(0).toUpperCase());
+      ownerIcon.setAttribute("aria-hidden", "true");
+      owner.append(ownerIcon, makeTextElement("span", "", project.owner));
+
+      const summary = makeTextElement("p", "project-summary", project.summary || "A collaborative effort from Mona’s team.");
+      const activity = document.createElement("div");
+      activity.className = "project-activity";
+      activity.append(
+        makeTextElement("span", "detail-label", "RECENT ACTIVITY"),
+        makeTextElement("p", "activity-copy", project.recentActivity)
+      );
+
+      const cardBottom = document.createElement("div");
+      cardBottom.className = "card-bottom";
+      cardBottom.append(
+        makeTextElement("span", "detail-label", "PRIORITY"),
+        makeTextElement("span", `priority-badge priority-${project.priority.toLowerCase()}`, project.priority)
+      );
+
+      card.append(cardTop, heading, owner, summary, activity, cardBottom);
+      return card;
+    }
+
+    async function loadProjects() {
+      try {
+        const response = await fetch("project-data.json");
+        if (!response.ok) {
+          throw new Error(`Project data request failed with status ${response.status}.`);
+        }
+        const data = await response.json();
+        if (!Array.isArray(data.projects)) {
+          throw new Error("Project data must include a projects array.");
+        }
+
+        const requiredFields = ["name", "owner", "status", "recentActivity", "priority"];
+        if (data.projects.some((project) =>
+          !project || requiredFields.some((field) => typeof project[field] !== "string" || !project[field].trim())
+        )) {
+          throw new Error("Each project must include a name, owner, status, recent activity, and priority.");
+        }
+
+        projectsContainer.replaceChildren();
+        data.projects.forEach((project) => projectsContainer.append(renderProject(project)));
+        projectsContainer.setAttribute("aria-busy", "false");
+        document.querySelector("#project-count").textContent = data.projects.length;
+        document.querySelector("#projects-heading-count").textContent = `(${data.projects.length})`;
+        document.querySelector("#active-count").textContent = data.projects.filter(
+          (project) => project.status.toLowerCase() === "in progress"
+        ).length;
+        document.querySelector("#focus-count").textContent = data.projects.filter(
+          (project) => project.priority.toLowerCase() === "high"
+        ).length;
+        document.querySelector("#updated-label").textContent =
+          `Updated ${new Intl.DateTimeFormat("en", { month: "long", day: "numeric" }).format(new Date())}`;
+      } catch (error) {
+        projectsContainer.replaceChildren();
+        projectsContainer.setAttribute("aria-busy", "false");
+        errorMessage.hidden = false;
+        errorMessage.textContent = `We couldn’t load the project overview. ${error.message} Please try again in a moment.`;
+      }
+    }
+
+    loadProjects();
+  </script>
+</body>
+</html>

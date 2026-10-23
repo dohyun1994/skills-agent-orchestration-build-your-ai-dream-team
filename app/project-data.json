@@ -1,0 +1,52 @@
+{
+  "projects": [
+    {
+      "name": "Contributor Welcome Kit",
+      "owner": "Maya Chen",
+      "status": "In Progress",
+      "recentActivity": "First-draft onboarding guide shared with the team yesterday.",
+      "priority": "High",
+      "summary": "Making the first contribution feel clear, friendly, and easy to start."
+    },
+    {
+      "name": "Community Feedback Loop",
+      "owner": "Jordan Lee",
+      "status": "Review",
+      "recentActivity": "Feedback themes are ready for a quick team review.",
+      "priority": "Medium",
+      "summary": "Turning contributor ideas into thoughtful, actionable improvements."
+    },
+    {
+      "name": "Docs Refresh",
+      "owner": "Sam Rivera",
+      "status": "In Progress",
+      "recentActivity": "The setup guide got a round of edits this morning.",
+      "priority": "Medium",
+      "summary": "Keeping the project docs helpful, approachable, and up to date."
+    },
+    {
+      "name": "Accessibility Check-in",
+      "owner": "Avery Patel",
+      "status": "Planning",
+      "recentActivity": "A short list of keyboard-navigation checks is taking shape.",
+      "priority": "High",
+      "summary": "Making everyday workflows more comfortable for every contributor."
+    },
+    {
+      "name": "Release Notes Garden",
+      "owner": "Taylor Brooks",
+      "status": "On Track",
+      "recentActivity": "This week’s updates are gathered and ready to shape.",
+      "priority": "Low",
+      "summary": "Growing a simple, consistent rhythm for sharing what changed."
+    },
+    {
+      "name": "Team Demo Day",
+      "owner": "Riley Morgan",
+      "status": "Planning",
+      "recentActivity": "The team is collecting ideas for the next show-and-tell.",
+      "priority": "Low",
+      "summary": "Creating a relaxed space to celebrate progress and learn together."
+    }
+  ]
+}
